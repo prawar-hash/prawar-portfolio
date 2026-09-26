@@ -1,0 +1,284 @@
+@import '../../styles/variables.css';
+
+/* ── Far-Right Scrollbar Replacement Track ── */
+.gaugeContainer {
+  position: fixed;
+  right: 0;
+  top: var(--navbar-height);
+  bottom: 0;
+  z-index: 95;
+  user-select: none;
+  pointer-events: none;
+  display: flex;
+  align-items: stretch;
+}
+
+/* Precision Full-Height Rail Frame */
+.gaugeFrame {
+  width: 44px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: rgba(10, 10, 12, 0.7);
+  border-left: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 1.25rem 0;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: -4px 0 16px rgba(0, 0, 0, 0.4);
+  pointer-events: auto;
+}
+
+/* Full-Height Vertical Track Area (Shared Center Reference Axis) */
+.gaugeTrackArea {
+  position: relative;
+  width: 32px;
+  flex: 1;
+  margin: 0 auto;
+}
+
+/* 1. Main Background Track Rail Line (Dead Center on Axis) */
+.trackLine {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateX(-50%);
+  border-radius: 1px;
+}
+
+/* 2. Active Filled Red Progress Line (Runs down exact same center axis) */
+.trackFill {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 2px;
+  background: linear-gradient(
+    180deg,
+    rgba(239, 68, 68, 0.6) 0%,
+    var(--accent) 100%
+  );
+  transform: translateX(-50%);
+  border-radius: 1px;
+  box-shadow: 0 0 6px var(--accent);
+  transition: height 0.08s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* 3. Micro Calibration Ticks Centered on Axis */
+.ticksOverlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.tick {
+  position: absolute;
+  left: 50%;
+  width: 4px;
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.12);
+  transform: translate(-50%, -50%);
+}
+
+.tick.majorTick {
+  width: 8px;
+  background-color: rgba(255, 255, 255, 0.28);
+}
+
+/* 4. Section Waypoint Markers (00 to 06) */
+.waypointsList {
+  position: absolute;
+  inset: 0;
+  pointer-events: auto;
+}
+
+.waypointBtn {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  transition: all var(--transition-fast);
+  z-index: 2;
+}
+
+/* Standard Section Marker Point (Center sits dead-center on track) */
+.waypointPoint {
+  display: block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #24242e;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  margin: 0 auto;
+  transition: all var(--transition-fast);
+}
+
+/* Section Code (00-06) Placed to the Left of the Inactive Marker */
+.waypointCode {
+  position: absolute;
+  right: calc(100% + 4px);
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  font-weight: var(--weight-bold);
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+  opacity: 0.75;
+  white-space: nowrap;
+  pointer-events: none;
+  transition: all var(--transition-fast);
+}
+
+.waypointBtn:hover .waypointPoint {
+  background-color: var(--accent);
+  border-color: #ffffff;
+  width: 8px;
+  height: 8px;
+  box-shadow: 0 0 8px var(--accent);
+}
+
+.waypointBtn:hover .waypointCode {
+  color: var(--text-primary);
+  opacity: 1;
+}
+
+/* Passed Section Point (Red progress line has reached/passed it) */
+.waypointBtn.passedWaypoint .waypointPoint {
+  background-color: var(--accent);
+  border-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 4px var(--accent);
+}
+
+/* Active Section Point */
+.waypointBtn.activeWaypoint .waypointPoint {
+  background-color: var(--accent);
+  border-color: #ffffff;
+  box-shadow: 0 0 6px var(--accent);
+}
+
+/* 5. Active Floating Measurement Indicator Needle (Center sits dead-center on track) */
+.indicatorNeedle {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  z-index: 10;
+  transition: top 0.08s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Active Red Center Circle Pip (Dead-center on the line and marker points) */
+.needleDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: var(--accent);
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 10px var(--accent), inset 0 0 2px #ffffff;
+  margin: 0 auto;
+  display: block;
+}
+
+/* Active Section Telemetry Panel — Vertically centered EXACTLY against the active dot center */
+.readoutBadge {
+  position: absolute;
+  right: calc(100% + 12px);
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background-color: rgba(12, 12, 16, 0.95);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-xs);
+  padding: 0.25rem 0.55rem;
+  white-space: nowrap;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.8), 0 0 10px rgba(239, 68, 68, 0.2);
+  pointer-events: auto;
+  z-index: 10;
+  animation: badgeIn 0.15s ease-out;
+}
+
+@keyframes badgeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50%) translateX(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+  }
+}
+
+.readoutCode {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: var(--weight-bold);
+  color: var(--accent);
+}
+
+.readoutName {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: var(--weight-bold);
+  color: var(--text-primary);
+  letter-spacing: 0.05em;
+}
+
+.readoutDivider {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.25);
+  user-select: none;
+}
+
+.readoutPercent {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: var(--weight-semibold);
+  color: var(--text-muted);
+}
+
+/* ── Responsive Adaptations ── */
+@media (max-width: 1024px) {
+  .gaugeFrame {
+    width: 36px;
+  }
+
+  .readoutName {
+    display: none;
+  }
+}
+
+/* Hide on mobile devices to prevent touch interference and horizontal overflow */
+@media (max-width: 860px) {
+  .gaugeContainer {
+    display: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trackFill,
+  .gaugeContainer,
+  .indicatorNeedle,
+  .readoutBadge {
+    transition: none !important;
+    animation: none !important;
+  }
+}

@@ -1,0 +1,155 @@
+@import '../../styles/variables.css';
+
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-width: 900px;
+}
+
+.item {
+  display: flex;
+  gap: 1.5rem;
+  position: relative;
+}
+
+.markerColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  width: 75px;
+}
+
+.specMarker {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: var(--weight-bold);
+  color: var(--accent);
+  background-color: var(--accent-subtle);
+  border: 1px solid var(--accent-border);
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-xs);
+  letter-spacing: 0.05em;
+  z-index: 2;
+}
+
+.verticalLine {
+  flex: 1;
+  width: 1px;
+  background: linear-gradient(to bottom, var(--accent-border), var(--border));
+  margin-top: 0.5rem;
+}
+
+.item:last-child .verticalLine {
+  display: none;
+}
+
+.card {
+  flex: 1;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  transition: transform var(--transition-base), border-color var(--transition-base), box-shadow var(--transition-base);
+}
+
+.card:hover {
+  border-color: var(--accent-border);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px -8px rgba(0, 0, 0, 0.5), 0 0 20px -8px rgba(239, 68, 68, 0.15);
+}
+
+.headerRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.6rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.levelHeading {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: var(--weight-bold);
+  color: var(--accent);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.periodBadge {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: var(--weight-medium);
+  color: var(--text-muted);
+  background-color: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-xs);
+}
+
+.degreeTitle {
+  font-size: 1.125rem;
+  font-weight: var(--weight-bold);
+  color: var(--text-primary);
+  margin: 0 0 0.4rem 0;
+}
+
+.institutionName {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin: 0 0 1rem 0;
+}
+
+.metaRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.metaBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: var(--weight-semibold);
+  color: var(--text-primary);
+  background-color: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+  padding: 0.25rem 0.6rem;
+  border-radius: var(--radius-xs);
+}
+
+.metaDot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: var(--accent);
+}
+
+@media (max-width: 640px) {
+  .item {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .markerColumn {
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .verticalLine {
+    height: 1px;
+    width: auto;
+    flex: 1;
+    margin-top: 0;
+  }
+
+  .card {
+    padding: 1.25rem;
+  }
+}

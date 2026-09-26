@@ -1,0 +1,438 @@
+@import '../../styles/variables.css';
+
+.aboutSection {
+  position: relative;
+  padding: 5.5rem 0;
+  overflow: hidden;
+}
+
+/* ── Technical Backdrop (Blueprint Grid & Markings) ── */
+.technicalBackdrop {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.3;
+}
+
+.gridOverlay {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 36px 36px;
+}
+
+.crosshairTopLeft {
+  position: absolute;
+  top: 2rem;
+  left: 3rem;
+  font-family: var(--font-mono);
+  font-size: 1.25rem;
+  color: rgba(239, 68, 68, 0.35);
+}
+
+.crosshairBottomRight {
+  position: absolute;
+  bottom: 2rem;
+  right: 3rem;
+  font-family: var(--font-mono);
+  font-size: 1.25rem;
+  color: rgba(239, 68, 68, 0.35);
+}
+
+/* ── Main Dossier Layout ── */
+.dossierLayout {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Two-Column Grid ── */
+.twoColumnGrid {
+  display: grid;
+  grid-template-columns: 1.35fr 0.85fr;
+  gap: 1.75rem;
+  align-items: stretch;
+}
+
+/* ── Shared Panel Header ── */
+.panelHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 1.25rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.panelStatus {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.statusDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: var(--accent);
+  box-shadow: 0 0 6px var(--accent);
+}
+
+.panelCode {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: var(--weight-bold);
+  color: var(--accent);
+  letter-spacing: 0.08em;
+}
+
+.panelMeta {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+}
+
+/* ── LEFT: Primary About Panel ── */
+.primaryPanel {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 2.25rem;
+  display: flex;
+  flex-direction: column;
+  transition: border-color var(--transition-base), box-shadow var(--transition-base);
+}
+
+.primaryPanel:hover {
+  border-color: var(--accent-border);
+  box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.5), 0 0 24px -10px rgba(239, 68, 68, 0.15);
+}
+
+.narrativeContent {
+  margin-bottom: 0.5rem;
+}
+
+.secondaryBio {
+  font-size: 1.125rem;
+  color: var(--text-primary);
+  line-height: 1.75;
+  margin: 0;
+  font-weight: 400;
+}
+
+.panelDivider {
+  height: 1px;
+  background: linear-gradient(to right, var(--accent-border), var(--border) 60%, rgba(255, 255, 255, 0.02) 100%);
+  margin: 2rem 0;
+}
+
+/* Core Focus Section inside Primary Panel */
+.coreFocusSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.focusHeaderRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.focusHeading {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.08em;
+  color: var(--text-primary);
+}
+
+.specBadge {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: var(--weight-semibold);
+  color: var(--accent);
+  background: var(--accent-subtle);
+  padding: 0.15rem 0.45rem;
+  border-radius: var(--radius-xs);
+  border: 1px solid var(--accent-border);
+  letter-spacing: 0.06em;
+}
+
+.focusGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.focusItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.85rem 1rem;
+  background-color: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xs);
+  transition: border-color var(--transition-fast), background-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.focusItem:hover {
+  background-color: var(--accent-subtle);
+  border-color: var(--accent-border);
+  transform: translateY(-1px);
+}
+
+.focusItemLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.focusIcon {
+  width: 18px;
+  height: 18px;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.focusIcon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.focusName {
+  font-size: 0.875rem;
+  font-weight: var(--weight-semibold);
+  color: var(--text-primary);
+}
+
+.focusItemRight {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.focusLine {
+  width: 20px;
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.focusCode {
+  font-family: var(--font-mono);
+  font-size: 0.725rem;
+  font-weight: var(--weight-semibold);
+  color: var(--accent);
+}
+
+/* ── RIGHT: Information Panel (Technical Principles) ── */
+.infoPanel {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 2.25rem;
+  display: flex;
+  flex-direction: column;
+  transition: border-color var(--transition-base), box-shadow var(--transition-base);
+}
+
+.infoPanel:hover {
+  border-color: var(--accent-border);
+  box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.5), 0 0 24px -10px rgba(239, 68, 68, 0.15);
+}
+
+.infoRows {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  flex: 1;
+  justify-content: space-between;
+}
+
+.infoRowModule {
+  background-color: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xs);
+  padding: 1.25rem 1.35rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  position: relative;
+  transition: border-color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.infoRowModule::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 16px;
+  height: 2px;
+  background-color: var(--accent);
+  opacity: 0.6;
+  transition: width var(--transition-fast), opacity var(--transition-fast);
+}
+
+.infoRowModule:hover {
+  border-color: var(--accent-border);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px -6px rgba(0, 0, 0, 0.4), 0 0 16px -8px rgba(239, 68, 68, 0.15);
+}
+
+.infoRowModule:hover::before {
+  width: 100%;
+  opacity: 1;
+}
+
+.rowHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.rowLabel {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.08em;
+  color: var(--accent);
+}
+
+.rowTag {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--text-muted);
+}
+
+.rowValue {
+  font-size: 0.9375rem;
+  color: var(--text-primary);
+  line-height: 1.5;
+  margin: 0;
+  font-weight: var(--weight-medium);
+}
+
+/* ── Full-Width Currently Refining Panel ── */
+.refiningPanel {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 1.25rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  transition: border-color var(--transition-base), box-shadow var(--transition-base);
+}
+
+.refiningPanel:hover {
+  border-color: var(--accent-border);
+  box-shadow: 0 10px 24px -8px rgba(0, 0, 0, 0.5), 0 0 20px -8px rgba(239, 68, 68, 0.15);
+}
+
+.refiningHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.statusPulse {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--accent);
+  box-shadow: 0 0 8px var(--accent);
+  animation: pulseRed 2s infinite ease-in-out;
+}
+
+@keyframes pulseRed {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+  70% { transform: scale(1.1); box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+}
+
+.refiningTitle {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+.refiningTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.refiningChip {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--font-mono);
+  font-size: 0.775rem;
+  font-weight: var(--weight-medium);
+  color: var(--text-primary);
+  background-color: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+  padding: 0.4rem 0.9rem;
+  border-radius: 9999px;
+  transition: border-color var(--transition-fast), color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.refiningChip:hover {
+  border-color: var(--accent-border);
+  background-color: var(--accent-subtle);
+  color: #ffffff;
+}
+
+.refiningDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: var(--accent);
+}
+
+/* ── Responsive Breakpoints ── */
+@media (max-width: 1024px) {
+  .twoColumnGrid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .aboutSection {
+    padding: 4rem 0;
+  }
+
+  .primaryPanel, .infoPanel {
+    padding: 1.5rem;
+  }
+
+  .secondaryBio {
+    font-size: 1rem;
+    line-height: 1.65;
+  }
+
+  .focusGrid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .refiningPanel {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1.25rem;
+  }
+}

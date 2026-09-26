@@ -1,0 +1,774 @@
+@import '../../styles/variables.css';
+
+/* ── Chassis Outer Card ── */
+.chassisCard {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  position: relative;
+  perspective: 1200px;
+  transform-style: preserve-3d;
+  transition: border-color var(--transition-base), box-shadow var(--transition-base), transform var(--transition-base);
+  display: flex;
+  flex-direction: column;
+}
+
+.chassisCard.hoodClosed {
+  cursor: pointer;
+}
+
+.chassisCard:hover {
+  border-color: var(--accent-border);
+  box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.7), 0 0 24px -10px rgba(239, 68, 68, 0.15);
+}
+
+.chassisCard.hoodOpen {
+  border-color: var(--accent-border);
+  box-shadow: 0 20px 48px -12px rgba(0, 0, 0, 0.85), 0 0 32px -8px rgba(239, 68, 68, 0.25);
+  cursor: default;
+}
+
+/* ── Top Hinge Assembly & Pivot Bar ── */
+.hingeBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.45rem 0.85rem;
+  background-color: #0b0b0e;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-top-left-radius: var(--radius-lg);
+  border-top-right-radius: var(--radius-lg);
+  user-select: none;
+  z-index: 3;
+}
+
+.hingeBracketLeft,
+.hingeBracketRight {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.hingePin {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: #2a2a34;
+  border: 1px solid #4a4a58;
+  box-shadow: inset 0 0 2px rgba(239, 68, 68, 0.8);
+}
+
+.hingeLabel {
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  font-weight: var(--weight-bold);
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+}
+
+.hingeCenterTrack {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+  margin: 0 0.75rem;
+}
+
+.hingeAxisLine {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(239, 68, 68, 0.4), transparent);
+}
+
+.hingeCenterText {
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  color: var(--text-muted);
+  letter-spacing: 0.06em;
+  opacity: 0.7;
+}
+
+/* ── Hydraulic Gas Struts ── */
+.strutAssembly {
+  position: absolute;
+  top: 24px;
+  left: 0;
+  right: 0;
+  height: 30px;
+  pointer-events: none;
+  z-index: 2;
+  overflow: hidden;
+}
+
+.strut {
+  position: absolute;
+  width: 4px;
+  height: 28px;
+  background: #1e1e26;
+  border: 1px solid #333342;
+  border-radius: 2px;
+  transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
+  opacity: 0;
+}
+
+.strutLeft {
+  left: 12px;
+  transform: rotate(-15deg) translateY(-20px);
+}
+
+.strutRight {
+  right: 12px;
+  transform: rotate(15deg) translateY(-20px);
+}
+
+.chassisCard.hoodOpen .strut {
+  opacity: 0.8;
+  transform: rotate(0deg) translateY(0);
+}
+
+.strutPiston {
+  display: block;
+  width: 2px;
+  height: 14px;
+  background: linear-gradient(180deg, #d1d5db 0%, #6b7280 100%);
+  margin: 0 auto;
+}
+
+/* ── 3D Car Hood Panel ── */
+.hoodPanel {
+  position: relative;
+  z-index: 5;
+  transform-origin: top center;
+  transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.65s ease;
+  outline: none;
+  user-select: none;
+  transform-style: preserve-3d;
+  backface-visibility: visible;
+  -webkit-backface-visibility: visible;
+}
+
+.chassisCard.hoodOpen .hoodPanel {
+  cursor: pointer;
+}
+
+/* Closed Hood State - Clean hover lift without 3D filter clipping */
+.chassisCard.hoodClosed:hover .hoodPanel {
+  transform: translateY(-2px);
+}
+
+.chassisCard.hoodClosed:hover .latchButton {
+  border-color: var(--accent);
+  color: var(--accent-hover);
+  background-color: rgba(239, 68, 68, 0.14);
+}
+
+/* Opened Hood State (3D Rotation Upward) */
+.chassisCard.hoodOpen .hoodPanel {
+  transform: rotateX(68deg) translateY(-14px) scale(0.95);
+  box-shadow: 0 28px 45px -10px rgba(0, 0, 0, 0.9), 0 0 20px rgba(0, 0, 0, 0.6), inset 0 2px 8px rgba(255, 255, 255, 0.08);
+}
+
+/* Hood Surface Finish */
+.hoodSurface {
+  background: linear-gradient(175deg, #181820 0%, #121217 60%, #0d0d11 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Aerodynamic Body Line Creases */
+.hoodCreaseLeft {
+  position: absolute;
+  top: 0;
+  left: 20%;
+  width: 1px;
+  height: 100%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(239, 68, 68, 0.15) 50%, transparent 100%);
+  transform: skewX(-4deg);
+  pointer-events: none;
+}
+
+.hoodCreaseRight {
+  position: absolute;
+  top: 0;
+  right: 20%;
+  width: 1px;
+  height: 100%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(239, 68, 68, 0.15) 50%, transparent 100%);
+  transform: skewX(4deg);
+  pointer-events: none;
+}
+
+.hoodSpine {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 1px;
+  height: 85%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, transparent 80%);
+  pointer-events: none;
+}
+
+.hoodSheen {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% -20%, rgba(255, 255, 255, 0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* Hood Header Specs */
+.hoodHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  margin-bottom: 1rem;
+}
+
+.hoodMetaGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.hoodCode {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: var(--weight-bold);
+  color: var(--text-primary);
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid var(--border);
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-xs);
+  letter-spacing: 0.06em;
+}
+
+.hoodPanelTag {
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  font-weight: var(--weight-semibold);
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+}
+
+/* Status Badges */
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: var(--weight-bold);
+  color: var(--text-secondary);
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid var(--border);
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-xs);
+}
+
+.statusBadge.refining {
+  color: var(--accent-hover);
+  border-color: var(--accent-border);
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.statusDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: var(--accent);
+}
+
+.statusDot.green {
+  background-color: #22c55e;
+}
+
+.statusDot.blue {
+  background-color: #38bdf8;
+}
+
+/* Hood Center Identity */
+.hoodCenter {
+  position: relative;
+  z-index: 2;
+  margin: 0.5rem 0 1.25rem 0;
+}
+
+.hoodCategory {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: var(--weight-bold);
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  display: block;
+  margin-bottom: 0.3rem;
+}
+
+.hoodTitle {
+  font-size: 1.375rem;
+  font-weight: var(--weight-extrabold);
+  color: var(--text-primary);
+  margin: 0 0 0.25rem 0;
+  letter-spacing: 0.02em;
+}
+
+.hoodSubtitle {
+  font-size: 0.8125rem;
+  font-weight: var(--weight-medium);
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.hoodWatermark {
+  position: absolute;
+  bottom: -0.75rem;
+  right: 0;
+  font-family: var(--font-mono);
+  font-size: 84px;
+  font-weight: 900;
+  color: #ffffff;
+  opacity: 0.03;
+  line-height: 1;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* Hood Latch Button */
+.hoodLatch {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  z-index: 2;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.latchButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: var(--weight-bold);
+  color: var(--accent);
+  letter-spacing: 0.06em;
+  padding: 0.4rem 0.75rem;
+  background-color: rgba(239, 68, 68, 0.08);
+  border: 1px solid var(--accent-border);
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  outline: none;
+  transition: all var(--transition-fast);
+  pointer-events: auto;
+}
+
+.latchButton:hover {
+  background-color: var(--accent);
+  color: #ffffff;
+  border-color: var(--accent);
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
+}
+
+.latchButton:focus-visible {
+  box-shadow: 0 0 0 2px var(--accent);
+}
+
+.latchIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.latchIcon svg {
+  width: 14px;
+  height: 14px;
+}
+
+.latchStatusDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--accent);
+  box-shadow: 0 0 6px var(--accent);
+}
+
+.chassisCard.hoodOpen .latchStatusDot {
+  background-color: #22c55e;
+  box-shadow: 0 0 6px rgba(34, 197, 94, 0.8);
+}
+
+/* Under-Hood Structural Ribbing */
+.underHoodLiner {
+  position: absolute;
+  inset: 0;
+  background: #0d0d12;
+  border-bottom: 2px solid #2a2a36;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chassisCard.hoodOpen .underHoodLiner {
+  opacity: 0.15;
+}
+
+.linerBadge {
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  color: #ffffff;
+  letter-spacing: 0.1em;
+  opacity: 0.5;
+}
+
+/* ── EXPOSED ENGINE BAY (Internal Assembly) ── */
+.engineBay {
+  position: relative;
+  background: radial-gradient(circle at 50% 0%, rgba(239, 68, 68, 0.05) 0%, rgba(10, 10, 14, 0.98) 75%);
+  border-bottom-left-radius: var(--radius-lg);
+  border-bottom-right-radius: var(--radius-lg);
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+  transition: max-height 0.65s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.45s ease, padding 0.5s ease;
+  padding: 0 1.5rem;
+}
+
+.chassisCard.hoodOpen .engineBay {
+  max-height: 900px;
+  opacity: 1;
+  pointer-events: auto;
+  padding: 1.5rem;
+}
+
+/* Shadow cast beneath lifted hood */
+.hoodCastShadow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 24px;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.bayFrame {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.bayHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.bayTelemetry {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.bayPulse {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #22c55e;
+  box-shadow: 0 0 6px rgba(34, 197, 94, 0.8);
+}
+
+.bayLabel {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: var(--weight-bold);
+  color: var(--text-primary);
+  letter-spacing: 0.08em;
+}
+
+.bayCategory {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: var(--weight-bold);
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.bayMain {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.bayTitle {
+  font-size: 1.25rem;
+  font-weight: var(--weight-extrabold);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.baySubtitle {
+  font-size: 0.8125rem;
+  font-weight: var(--weight-medium);
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.bayDescription {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0.25rem 0 0.5rem 0;
+}
+
+/* Technology Pills inside Engine Bay */
+.bayTechSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.techSectionLabel {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: var(--weight-bold);
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+}
+
+.techTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.techPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  padding: 0.25rem 0.55rem;
+  border-radius: var(--radius-xs);
+  border: 1px solid var(--border);
+}
+
+.techDot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: var(--accent);
+}
+
+/* Bay Action Dock */
+.bayActionDock {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  margin-top: 0.5rem;
+}
+
+.caseStudyBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: var(--weight-bold);
+  color: #ffffff;
+  background-color: var(--accent);
+  border: 1px solid var(--accent);
+  padding: 0.45rem 0.9rem;
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  letter-spacing: 0.06em;
+  transition: all var(--transition-fast);
+  pointer-events: auto;
+}
+
+.caseStudyBtn:hover {
+  background-color: var(--accent-hover);
+  border-color: var(--accent-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+}
+
+.caseStudyBtn svg {
+  width: 14px;
+  height: 14px;
+  transition: transform var(--transition-fast);
+}
+
+.caseStudyBtn:hover svg {
+  transform: translateX(3px);
+}
+
+.secondaryActions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.closeHoodBtn {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: var(--weight-semibold);
+  color: var(--text-muted);
+  background: transparent;
+  border: 1px solid var(--border);
+  padding: 0.4rem 0.75rem;
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  letter-spacing: 0.06em;
+  transition: all var(--transition-fast);
+  pointer-events: auto;
+}
+
+.closeHoodBtn:hover {
+  color: var(--text-primary);
+  border-color: var(--border-hover);
+  background-color: rgba(255, 255, 255, 0.04);
+}
+
+.githubIcon {
+  color: var(--text-muted);
+  transition: color var(--transition-fast), transform var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background-color: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xs);
+  pointer-events: auto;
+}
+
+.githubIcon svg {
+  width: 15px;
+  height: 15px;
+}
+
+.githubIcon:hover {
+  color: var(--text-primary);
+  border-color: var(--accent-border);
+  transform: scale(1.05);
+}
+
+/* ── HUD Corner Ticks ── */
+.cornerTick {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-color: var(--accent);
+  border-style: solid;
+  pointer-events: none;
+  z-index: 6;
+}
+
+.cornerTL {
+  top: -1px;
+  left: -1px;
+  border-width: 2px 0 0 2px;
+}
+
+.cornerTR {
+  top: -1px;
+  right: -1px;
+  border-width: 2px 2px 0 0;
+}
+
+.cornerBL {
+  bottom: -1px;
+  left: -1px;
+  border-width: 0 0 2px 2px;
+}
+
+.cornerBR {
+  bottom: -1px;
+  right: -1px;
+  border-width: 0 2px 2px 0;
+}
+
+/* ── Responsive Adaptations ── */
+@media (max-width: 1024px) {
+  .chassisCard.hoodOpen .hoodPanel {
+    transform: rotateX(62deg) translateY(-10px) scale(0.96);
+  }
+}
+
+@media (max-width: 768px) {
+  .chassisCard.hoodOpen .hoodPanel {
+    transform: rotateX(50deg) translateY(-8px) scale(0.97);
+  }
+
+  .hoodSurface {
+    padding: 1.25rem;
+    min-height: 200px;
+  }
+
+  .engineBay {
+    padding: 0 1.25rem;
+  }
+
+  .chassisCard.hoodOpen .engineBay {
+    padding: 1.25rem;
+  }
+
+  .bayActionDock {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .caseStudyBtn {
+    justify-content: center;
+  }
+
+  .secondaryActions {
+    justify-content: space-between;
+  }
+
+  .closeHoodBtn {
+    flex: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hoodPanel,
+  .engineBay,
+  .strut {
+    transition: opacity 0.25s ease !important;
+    transform: none !important;
+  }
+
+  .chassisCard.hoodClosed .hoodPanel:hover {
+    transform: none !important;
+  }
+
+  .chassisCard.hoodOpen .hoodPanel {
+    transform: none !important;
+  }
+}
