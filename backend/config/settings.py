@@ -150,8 +150,9 @@ EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
 EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True').lower() in ('true', '1', 'yes')
 EMAIL_USE_SSL = os.getenv('EMAIL_USE_SSL', 'False').lower() in ('true', '1', 'yes')
-DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', EMAIL_HOST_USER or 'noreply@prawarkarande.com')
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', EMAIL_HOST_USER or 'onboarding@resend.dev')
 PORTFOLIO_OWNER_EMAIL = os.getenv('PORTFOLIO_OWNER_EMAIL', 'prawar65@gmail.com')
+RESEND_API_KEY = os.getenv('RESEND_API_KEY', '')
 
 # ── Security hardening (when DEBUG is False) ──
 if not DEBUG:

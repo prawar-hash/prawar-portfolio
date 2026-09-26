@@ -5,6 +5,7 @@ Provides endpoints for contact form submission with automatic email dispatch
 and read-only project/technology listing.
 """
 
+import resend
 import logging
 from django.conf import settings
 from django.core.mail import EmailMessage
@@ -31,7 +32,7 @@ class ContactThrottle(AnonRateThrottle):
 class ContactCreateView(generics.CreateAPIView):
     """
     Accepts contact form submissions, records them in the database,
-    and dispatches a real-time email notification to the portfolio owner.
+    and dispatches an email notification to the portfolio owner.
     """
 
     queryset = ContactMessage.objects.all()
@@ -40,11 +41,11 @@ class ContactCreateView(generics.CreateAPIView):
 
     def create(self, request, *args, **kwargs):
         """Validate, persist contact message, and dispatch notification email."""
+
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         contact_msg = serializer.save()
 
-        # Build notification email content with complete visitor telemetry
         timestamp = contact_msg.created_at.astimezone(
             timezone.get_current_timezone()
         ).strftime('%Y-%m-%d %H:%M:%S %Z')
@@ -63,21 +64,30 @@ class ContactCreateView(generics.CreateAPIView):
             "------------------------------------------------------------\n"
             f"{contact_msg.message}\n"
             "------------------------------------------------------------\n\n"
-            f"Reply directly to this email to respond to {contact_msg.name} ({contact_msg.email}).\n"
+            f"Reply directly to this email to respond to "
+            f"{contact_msg.name} ({contact_msg.email}).\n"
         )
 
-        recipient = getattr(settings, 'PORTFOLIO_OWNER_EMAIL', 'prawar65@gmail.com')
-        from_email = getattr(settings, 'DEFAULT_FROM_EMAIL', None) or getattr(settings, 'EMAIL_HOST_USER', None) or 'noreply@prawarkarande.com'
+        recipient = getattr(
+            settings,
+            'PORTFOLIO_OWNER_EMAIL',
+            'prawar65@gmail.com'
+        )
 
         try:
-            email = EmailMessage(
-                subject=f"[Portfolio Transmission] {contact_msg.subject} — from {contact_msg.name}",
-                body=email_body,
-                from_email=from_email,
-                to=[recipient],
-                reply_to=[contact_msg.email],
-            )
-            email.send(fail_silently=False)
+            resend.api_key = settings.RESEND_API_KEY
+
+            resend.Emails.send({
+                "from": settings.DEFAULT_FROM_EMAIL,
+                "to": [recipient],
+                "subject": (
+                    f"[Portfolio Transmission] "
+                    f"{contact_msg.subject} — from {contact_msg.name}"
+                ),
+                "text": email_body,
+                "reply_to": contact_msg.email,
+            })
+
         except Exception as exc:
             logger.error(
                 "Failed to dispatch contact notification email for record #%s: %s",
@@ -85,16 +95,25 @@ class ContactCreateView(generics.CreateAPIView):
                 str(exc),
                 exc_info=True,
             )
+
             return Response(
                 {
-                    'detail': 'Message recorded in database, but notification dispatch failed. Please contact prawar65@gmail.com directly.',
-                    'error': 'email_dispatch_failed',
+                    "detail": (
+                        "Message recorded in database, "
+                        "but notification dispatch failed."
+                    ),
+                    "error": "email_dispatch_failed",
                 },
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
         return Response(
-            {'message': 'Transmission received. I will review and respond shortly.'},
+            {
+                "message": (
+                    "Transmission received. "
+                    "I will review and respond shortly."
+                )
+            },
             status=status.HTTP_201_CREATED,
         )
 
