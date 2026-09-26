@@ -1,5 +1,5 @@
 /** API service — handles communication with the Django backend. */
-const API_BASE = '/api';
+const API_BASE = 'https://prawar-portfolio.onrender.com/api';
 
 /** Submits the contact form to the backend. */
 export async function submitContactForm({ name, email, subject, message }) {
