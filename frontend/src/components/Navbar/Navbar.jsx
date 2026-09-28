@@ -82,7 +82,7 @@ const Navbar = ({ activeSection, onNavClick }) => {
   };
 
   return (
-    <header className={`${styles.navbar} ${isScrolled ? styles.scrolled : ''}`}>
+    <header className={`${styles.navbar} ${isScrolled ? styles.scrolled : ''} ${isMobileMenuOpen ? styles.menuOpen : ''}`}>
       <div className={styles.container}>
         <div className={styles.brandGroup}>
           <a
